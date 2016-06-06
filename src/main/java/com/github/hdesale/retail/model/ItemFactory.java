@@ -3,7 +3,7 @@ package com.github.hdesale.retail.model;
 import com.github.hdesale.retail.pricing.item.BasicItemPriceCalculator;
 import com.github.hdesale.retail.pricing.item.ItemPriceCalculator;
 import com.github.hdesale.retail.pricing.item.ThreeForTwoItemPriceCalculator;
-import com.github.hdesale.retail.pricing.item.TwoForOneItemPriceCalculator;
+import com.github.hdesale.retail.pricing.item.BuyOneGetOneFreeItemPriceCalculator;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -51,7 +51,7 @@ public class ItemFactory {
         // like database, web-service or file etc.
         Item apple = new Item("APPLE", getBasicPriceCalculator("35"));
         Item banana = new Item("BANANA", getBasicPriceCalculator("20"));
-        Item melon = new Item("MELON", getTwoForOnePriceCalculator(getBasicPriceCalculator("50")));
+        Item melon = new Item("MELON", getBuyOneGetOneFreePriceCalculator(getBasicPriceCalculator("50")));
         Item lime = new Item("LIME", getThreeForTwoPriceCalculator(getBasicPriceCalculator("15")));
 
         Map<String, Item> items = new HashMap<>();
@@ -66,8 +66,8 @@ public class ItemFactory {
         return new BasicItemPriceCalculator(new BigDecimal(price));
     }
 
-    private static TwoForOneItemPriceCalculator getTwoForOnePriceCalculator(ItemPriceCalculator calculator) {
-        return new TwoForOneItemPriceCalculator(calculator);
+    private static BuyOneGetOneFreeItemPriceCalculator getBuyOneGetOneFreePriceCalculator(ItemPriceCalculator calculator) {
+        return new BuyOneGetOneFreeItemPriceCalculator(calculator);
     }
 
     private static ThreeForTwoItemPriceCalculator getThreeForTwoPriceCalculator(ItemPriceCalculator calculator) {

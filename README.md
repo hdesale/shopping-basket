@@ -16,7 +16,7 @@ _How to run_:- run `mvn exec:java` at project root dir
 
 * `ItemPriceCalculator` - Interface for calculating price of an item. Concrete implementations -
     * `BasicItemPriceCalculator`
-    * `TwoForOneItemPriceCalculator`
+    * `BuyOneGetOneFreeItemPriceCalculator`
     * `ThreeForTwoItemPriceCalculator`
 
 * `BasketPriceCalculator` - Interface for calculating price of a basket. Concrete implementations -

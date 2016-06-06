@@ -7,21 +7,21 @@ import java.math.BigDecimal;
 import static org.junit.Assert.assertTrue;
 
 /**
- * JUnit class for {@link TwoForOneItemPriceCalculator}
+ * JUnit class for {@link BuyOneGetOneFreeItemPriceCalculator}
  *
  * @author Hemant
  */
-public class TwoForOneItemPriceCalculatorTest {
+public class BuyOneGetOneFreeItemPriceCalculatorTest {
 
     @Test
     public void testCalculateTotalPrice() throws Exception {
         BasicItemPriceCalculator basicCalculator = new BasicItemPriceCalculator(BigDecimal.TEN);
-        TwoForOneItemPriceCalculator calculator = new TwoForOneItemPriceCalculator(basicCalculator);
+        BuyOneGetOneFreeItemPriceCalculator calculator = new BuyOneGetOneFreeItemPriceCalculator(basicCalculator);
         assertTrue(calculator.calculateTotalPrice(25).equals(BigDecimal.valueOf(130)));
     }
 
     @Test(expected = NullPointerException.class)
     public void testCalculateTotalPriceWithNullCalculator() throws Exception {
-        new TwoForOneItemPriceCalculator(null);
+        new BuyOneGetOneFreeItemPriceCalculator(null);
     }
 }

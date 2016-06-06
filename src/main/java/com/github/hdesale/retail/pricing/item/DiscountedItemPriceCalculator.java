@@ -12,7 +12,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Hemant
  * @see ThreeForTwoItemPriceCalculator
- * @see TwoForOneItemPriceCalculator
+ * @see BuyOneGetOneFreeItemPriceCalculator
  */
 public abstract class DiscountedItemPriceCalculator implements ItemPriceCalculator {
 
