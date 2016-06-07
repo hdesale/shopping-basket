@@ -9,6 +9,8 @@ import static java.util.Objects.requireNonNull;
  * and calculates a total discounted price for a supplied quantity of items.
  * <p>
  * This abstract class acts a decorator.
+ * <p>
+ * This is thread-safe class.
  *
  * @author Hemant
  * @see ThreeForTwoItemPriceCalculator
@@ -24,15 +26,16 @@ public abstract class DiscountedItemPriceCalculator implements ItemPriceCalculat
     }
 
     @Override
-    public BigDecimal calculateTotalPrice(int quantity) {
-        BigDecimal originalPrice = calculateOriginalPrice(quantity);
-        BigDecimal discountedPrice = calculateDiscount(quantity);
-        return originalPrice.subtract(discountedPrice);
+    public BigDecimal calculateTotalPrice(BigDecimal pricePerUnit, long quantity) {
+        requireNonNull(pricePerUnit, "Item price per unit can not be null");
+        BigDecimal originalPrice = calculateOriginalPrice(pricePerUnit, quantity);
+        BigDecimal discountedPrice = calculateDiscount(pricePerUnit, quantity);
+        return quantity > 0 ? originalPrice.subtract(discountedPrice) : BigDecimal.ZERO;
     }
 
-    protected BigDecimal calculateOriginalPrice(int quantity) {
-        return originalCalculator.calculateTotalPrice(quantity);
+    protected BigDecimal calculateOriginalPrice(BigDecimal pricePerUnit, long quantity) {
+        return quantity > 0 ? originalCalculator.calculateTotalPrice(pricePerUnit, quantity) : BigDecimal.ZERO;
     }
 
-    protected abstract BigDecimal calculateDiscount(int quantity);
+    protected abstract BigDecimal calculateDiscount(BigDecimal pricePerUnit, long quantity);
 }

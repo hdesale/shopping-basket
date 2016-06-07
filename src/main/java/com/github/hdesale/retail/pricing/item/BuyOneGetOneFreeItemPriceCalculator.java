@@ -2,6 +2,8 @@ package com.github.hdesale.retail.pricing.item;
 
 import java.math.BigDecimal;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Discounted item price calculator which applies the 'Buy 1 Get 1 Free' discount
  * and calculates a total price for a supplied quantity of items.
@@ -19,12 +21,8 @@ public class BuyOneGetOneFreeItemPriceCalculator extends DiscountedItemPriceCalc
     }
 
     @Override
-    public BigDecimal calculateTotalPrice(int quantity) {
-        return super.calculateTotalPrice(quantity);
-    }
-
-    @Override
-    protected BigDecimal calculateDiscount(int quantity) {
-        return super.calculateOriginalPrice(quantity / 2);
+    protected BigDecimal calculateDiscount(BigDecimal pricePerUnit, long quantity) {
+        requireNonNull(pricePerUnit, "Item price per unit can not be null");
+        return quantity > 0 ? super.calculateOriginalPrice(pricePerUnit, quantity / 2) : BigDecimal.ZERO;
     }
 }

@@ -4,6 +4,7 @@ import com.github.hdesale.retail.model.Basket;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 
 import static org.junit.Assert.assertTrue;
 
@@ -16,17 +17,14 @@ public class BasicBasketPriceCalculatorTest {
 
     @Test
     public void testCalculateTotalPrice() throws Exception {
-        Basket basket = new Basket();
-        basket.addItem("Apple");
-        basket.addItem("Banana");
-        basket.addItem("Apple");
-        BasicBasketPriceCalculator calculator = new BasicBasketPriceCalculator(basket.getItems());
-        assertTrue(calculator.calculateTotalPrice().equals(BigDecimal.valueOf(90)));
+        BasicBasketPriceCalculator calculator = new BasicBasketPriceCalculator();
+        Basket basket = new Basket(Arrays.asList("Apple", "Banana", "Apple"), calculator);
+        assertTrue(basket.calculateTotalPrice().equals(BigDecimal.valueOf(90)));
     }
 
     @Test(expected = NullPointerException.class)
-    public void testCalculateTotalPriceWithoutBasket() throws Exception {
-        BasicBasketPriceCalculator calculator = new BasicBasketPriceCalculator(null);
-        calculator.calculateTotalPrice();
+    public void testCalculateTotalPriceWithNullQuantities() throws Exception {
+        BasicBasketPriceCalculator calculator = new BasicBasketPriceCalculator();
+        calculator.calculateTotalPrice(null);
     }
 }

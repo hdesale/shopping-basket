@@ -1,15 +1,14 @@
 package com.github.hdesale.retail.model;
 
 import com.github.hdesale.retail.pricing.item.BasicItemPriceCalculator;
+import com.github.hdesale.retail.pricing.item.BuyOneGetOneFreeItemPriceCalculator;
 import com.github.hdesale.retail.pricing.item.ItemPriceCalculator;
 import com.github.hdesale.retail.pricing.item.ThreeForTwoItemPriceCalculator;
-import com.github.hdesale.retail.pricing.item.BuyOneGetOneFreeItemPriceCalculator;
 
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Factory class to create instances of {@link Item}. Items are identified by their names.
@@ -20,39 +19,35 @@ import java.util.Optional;
  *
  * @author Hemant
  */
-public class ItemFactory {
+class ItemFactory {
 
-    private static volatile ItemFactory factory;
+    private static class LazyInitializer {
+        private static final ItemFactory factory = new ItemFactory();
+    }
 
     private final Map<String, Item> itemsByName;
 
-    private ItemFactory(Map<String, Item> items) {
-        this.itemsByName = Collections.unmodifiableMap(items);
+    private ItemFactory() {
+        this.itemsByName = Collections.unmodifiableMap(loadItems());
     }
 
-    public static ItemFactory getInstance() {
-        if (factory == null) {
-            synchronized (ItemFactory.class) {
-                if (factory == null) {
-                    factory = new ItemFactory(loadItems());
-                }
-            }
+    static ItemFactory getInstance() {
+        return LazyInitializer.factory;
+    }
+
+    Item getItem(String itemName) {
+        Item item = itemsByName.get(itemName.trim().toUpperCase());
+        if (item == null) {
+            throw new IllegalArgumentException("Unknown item name: " + itemName);
         }
-        return factory;
+        return item;
     }
 
-    public Optional<Item> getItem(String itemName) {
-        return Optional.ofNullable(itemsByName.get(itemName.trim().toUpperCase()));
-    }
-
-    private static Map<String, Item> loadItems() {
-        // Currently this is just an in-memory map of items filled with static data.
-        // If required this could be enhanced to pull the data from some other places
-        // like database, web-service or file etc.
-        Item apple = new Item("APPLE", getBasicPriceCalculator("35"));
-        Item banana = new Item("BANANA", getBasicPriceCalculator("20"));
-        Item melon = new Item("MELON", getBuyOneGetOneFreePriceCalculator(getBasicPriceCalculator("50")));
-        Item lime = new Item("LIME", getThreeForTwoPriceCalculator(getBasicPriceCalculator("15")));
+    private Map<String, Item> loadItems() {
+        Item apple = new Item("APPLE", new BigDecimal("35"));
+        Item banana = new Item("BANANA", new BigDecimal("20"));
+        Item melon = new Item("MELON", new BigDecimal("50"), getBuyOneGetOneFreeCalculator(getBasicCalculator()));
+        Item lime = new Item("LIME", new BigDecimal("15"), getThreeForTwoCalculator(getBasicCalculator()));
 
         Map<String, Item> items = new HashMap<>();
         items.put("APPLE", apple);
@@ -62,15 +57,15 @@ public class ItemFactory {
         return items;
     }
 
-    private static BasicItemPriceCalculator getBasicPriceCalculator(String price) {
-        return new BasicItemPriceCalculator(new BigDecimal(price));
+    private static BasicItemPriceCalculator getBasicCalculator() {
+        return new BasicItemPriceCalculator();
     }
 
-    private static BuyOneGetOneFreeItemPriceCalculator getBuyOneGetOneFreePriceCalculator(ItemPriceCalculator calculator) {
+    private static BuyOneGetOneFreeItemPriceCalculator getBuyOneGetOneFreeCalculator(ItemPriceCalculator calculator) {
         return new BuyOneGetOneFreeItemPriceCalculator(calculator);
     }
 
-    private static ThreeForTwoItemPriceCalculator getThreeForTwoPriceCalculator(ItemPriceCalculator calculator) {
+    private static ThreeForTwoItemPriceCalculator getThreeForTwoCalculator(ItemPriceCalculator calculator) {
         return new ThreeForTwoItemPriceCalculator(calculator);
     }
 }

@@ -11,5 +11,5 @@ import java.math.BigDecimal;
  */
 public interface ItemPriceCalculator {
 
-    BigDecimal calculateTotalPrice(int quantity);
+    BigDecimal calculateTotalPrice(BigDecimal pricePerUnit, long quantity);
 }

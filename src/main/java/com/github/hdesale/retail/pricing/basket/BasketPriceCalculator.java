@@ -1,6 +1,9 @@
 package com.github.hdesale.retail.pricing.basket;
 
+import com.github.hdesale.retail.model.Item;
+
 import java.math.BigDecimal;
+import java.util.Map;
 
 /**
  * Basket price calculator interface.
@@ -9,5 +12,5 @@ import java.math.BigDecimal;
  */
 public interface BasketPriceCalculator {
 
-    BigDecimal calculateTotalPrice();
+    BigDecimal calculateTotalPrice(Map<Item, Long> quantitiesPerItem);
 }

@@ -3,9 +3,9 @@ package com.github.hdesale.retail.model;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * JUnit class for {@link ItemFactory}
@@ -26,37 +26,41 @@ public class ItemFactoryTest {
     @Test
     public void testGetItem() throws Exception {
         ItemFactory factory = ItemFactory.getInstance();
-        Optional<Item> apple = factory.getItem("Apple");
-        Optional<Item> banana = factory.getItem("Banana");
-        Optional<Item> melon = factory.getItem("Melon");
-        Optional<Item> lime = factory.getItem("Lime");
-        Optional<Item> xyz = factory.getItem("xyz");
+        Item apple = factory.getItem("Apple");
+        Item banana = factory.getItem("Banana");
+        Item melon = factory.getItem("Melon");
+        Item lime = factory.getItem("Lime");
 
-        assertTrue(apple.isPresent());
-        assertTrue(banana.isPresent());
-        assertTrue(melon.isPresent());
-        assertTrue(lime.isPresent());
-        assertFalse(xyz.isPresent());
+        assertNotNull(apple);
+        assertNotNull(banana);
+        assertNotNull(melon);
+        assertNotNull(lime);
 
-        assertTrue(apple.get().calculateTotalPrice(0).equals(BigDecimal.ZERO));
-        assertTrue(apple.get().calculateTotalPrice(1).equals(BigDecimal.valueOf(35)));
-        assertTrue(banana.get().calculateTotalPrice(1).equals(BigDecimal.valueOf(20)));
-        assertTrue(melon.get().calculateTotalPrice(2).equals(BigDecimal.valueOf(50)));
-        assertTrue(lime.get().calculateTotalPrice(3).equals(BigDecimal.valueOf(30)));
-        assertTrue(lime.get().calculateTotalPrice(-3).equals(BigDecimal.ZERO));
+        assertTrue(apple.calculateTotalPrice(0).equals(BigDecimal.ZERO));
+        assertTrue(apple.calculateTotalPrice(1).equals(BigDecimal.valueOf(35)));
+        assertTrue(banana.calculateTotalPrice(1).equals(BigDecimal.valueOf(20)));
+        assertTrue(melon.calculateTotalPrice(2).equals(BigDecimal.valueOf(50)));
+        assertTrue(lime.calculateTotalPrice(3).equals(BigDecimal.valueOf(30)));
+        assertTrue(lime.calculateTotalPrice(-3).equals(BigDecimal.ZERO));
     }
 
     @Test
     public void testCaseSensitivity() throws Exception {
         ItemFactory factory = ItemFactory.getInstance();
-        Optional<Item> lowerApple = factory.getItem("apple");
-        Optional<Item> upperApple = factory.getItem("APPLE");
-        Optional<Item> titleApple = factory.getItem("Apple");
+        Item lowerApple = factory.getItem("apple");
+        Item upperApple = factory.getItem("APPLE");
+        Item titleApple = factory.getItem("Apple");
 
-        assertTrue(lowerApple.isPresent());
-        assertTrue(upperApple.isPresent());
-        assertTrue(titleApple.isPresent());
-        assertTrue(lowerApple.get() == upperApple.get());
-        assertTrue(upperApple.get() == titleApple.get());
+        assertNotNull(lowerApple);
+        assertNotNull(upperApple);
+        assertNotNull(titleApple);
+        assertTrue(lowerApple == upperApple);
+        assertTrue(upperApple == titleApple);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testWithUnknownItem() throws Exception {
+        ItemFactory factory = ItemFactory.getInstance();
+        factory.getItem("xyz");
     }
 }

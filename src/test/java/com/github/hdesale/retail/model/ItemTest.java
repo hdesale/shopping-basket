@@ -19,39 +19,38 @@ public class ItemTest {
 
     @Test
     public void testGetName() throws Exception {
-        Item item = new Item("test", new BasicItemPriceCalculator(BigDecimal.valueOf(100)));
+        Item item = new Item("test", BigDecimal.valueOf(100), new BasicItemPriceCalculator());
         assertNotNull(item.getName());
         assertTrue(item.getName().equals("test"));
     }
 
     @Test(expected = NullPointerException.class)
     public void testWithNullName() throws Exception {
-        new Item(null, new BasicItemPriceCalculator(BigDecimal.valueOf(100)));
+        new Item(null, BigDecimal.valueOf(100), new BasicItemPriceCalculator());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testWithNullPrice() throws Exception {
+        new Item("test", null);
     }
 
     @Test
     public void testCalculateTotalPrice() throws Exception {
-        Item item = new Item("test", new BasicItemPriceCalculator(BigDecimal.valueOf(100)));
+        Item item = new Item("test", BigDecimal.valueOf(100), new BasicItemPriceCalculator());
         assertTrue(item.calculateTotalPrice(1).equals(BigDecimal.valueOf(100)));
     }
 
     @Test(expected = NullPointerException.class)
     public void testWithNullCalculator() throws Exception {
-        new Item("test", null);
+        new Item("test", BigDecimal.TEN, null);
     }
 
     @Test
     public void testEquality() throws Exception {
-        Item item = new Item("test", new BasicItemPriceCalculator(BigDecimal.valueOf(100)));
+        Item item = new Item("test", BigDecimal.valueOf(100), new BasicItemPriceCalculator());
         Set<Item> items = new HashSet<>();
         items.add(item);
         // note: price calculator is not considered for item equality
-        assertTrue(items.contains(new Item("test", new BasicItemPriceCalculator(BigDecimal.valueOf(1)))));
-    }
-
-    @Test
-    public void testToString() throws Exception {
-        Item item = new Item("test", new BasicItemPriceCalculator(BigDecimal.valueOf(100)));
-        assertTrue(item.toString().matches(".*'test'.*"));
+        assertTrue(items.contains(new Item("test", BigDecimal.valueOf(1), new BasicItemPriceCalculator())));
     }
 }

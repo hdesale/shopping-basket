@@ -2,7 +2,7 @@ package com.github.hdesale.retail.pricing.item;
 
 import java.math.BigDecimal;
 
-import static java.util.Objects.*;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Basic item price calculator which uniformly applies the price per unit
@@ -14,15 +14,9 @@ import static java.util.Objects.*;
  */
 public class BasicItemPriceCalculator implements ItemPriceCalculator {
 
-    private final BigDecimal pricePerUnit;
-
-    public BasicItemPriceCalculator(BigDecimal pricePerUnit) {
-        requireNonNull(pricePerUnit, "Item price can not be null");
-        this.pricePerUnit = pricePerUnit;
-    }
-
     @Override
-    public BigDecimal calculateTotalPrice(int quantity) {
-        return pricePerUnit.multiply(BigDecimal.valueOf(quantity));
+    public BigDecimal calculateTotalPrice(BigDecimal pricePerUnit, long quantity) {
+        requireNonNull(pricePerUnit, "Item price per unit can not be null");
+        return quantity > 0 ? pricePerUnit.multiply(BigDecimal.valueOf(quantity)) : BigDecimal.ZERO;
     }
 }
