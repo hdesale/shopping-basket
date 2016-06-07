@@ -13,27 +13,22 @@ _How to run_:- run `mvn exec:java` at project root dir
 * `Basket` - Basket contains multiple items and calculates the total price of items.
 
 * `BasketPriceCalculator` - Interface for calculating price of a basket.
-    Basket is always associated with a BasketPriceCalculator and uses it while
-    calculating the total price. This interface would help when there are multiple
-    basket price calculations.
 
-    Concrete implementations -
+    Basket is always associated with a BasketPriceCalculator and uses it while calculating the total price. This interface would help when there are multiple types of basket price calculations.
+
+    _Concrete implementations_ -
     * `BasicBasketPriceCalculator` - Simply sums up the total price per item.
 
-* `Item` - Represents an item in the basket and is identified by item name(`String`).
-    It calculates the total price of item for a supplied quantity.
+* `Item` - Represents an item in the basket and is identified by item name(`String`). It calculates the total price of item for a supplied quantity.
 
 * `ItemPriceCalculator` - Interface for calculating price of an item.
-    Item is always associated with a ItemPriceCalculator and uses it while
-    calculating the total price of item. This interface helps to facilitate multiple
-    item price calculators.
 
-    Concrete implementations -
-    * `BasicItemPriceCalculator` - Simply applies the same price for each item.
+    Item is always associated with a ItemPriceCalculator and uses it while calculating the total price of item. This interface helps to facilitate multiple types of item price calculators.
 
-    * `DiscountedItemPriceCalculator` - This is a decorator class which wraps an
-        underlying ItemPriceCalculator e.g. BasicItemPriceCalculator and adds
-        some discount to the price calculated by the underlying calculator.
+    _Concrete implementations_ -
+    * `BasicItemPriceCalculator` - Simply applies the original price to each item.
+
+    * `DiscountedItemPriceCalculator` - This is a decorator class which wraps an underlying ItemPriceCalculator and adds some discount to the price calculated by the underlying calculator.
 
         * `BuyOneGetOneFreeItemPriceCalculator` - Applies Buy 1 Get 1 Free discount
 
